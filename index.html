@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Color Checker</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 50px;
+            }
+
+            #colorBox {
+                width: 200px;
+                height: 200px;
+                margin: 20px auto;
+                border: 1px solid #000;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+            }
+
+            #result {
+                font-size: 24px;
+                margin-top: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Color Checker</h1>
+        <input type="color" id="colorPicker" value="#ffffff" />
+        <div id="colorBox">
+            <div id="result">Select a color</div>
+        </div>
+
+        <script>
+            function isColorLightOrDark(hexColor) {
+                hexColor = hexColor.replace(/^#/, "");
+
+                if (hexColor.length === 3) {
+                    hexColor = hexColor
+                        .split("")
+                        .map((hex) => hex + hex)
+                        .join("");
+                }
+
+                const r = parseInt(hexColor.slice(0, 2), 16);
+                const g = parseInt(hexColor.slice(2, 4), 16);
+                const b = parseInt(hexColor.slice(4, 6), 16);
+
+                const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                return luminance > 128 ? "light" : "dark";
+            }
+
+            function updateColorDisplay() {
+                const color = colorPicker.value;
+                colorBox.style.backgroundColor = color;
+                const lightOrDark = isColorLightOrDark(color);
+                console.log(lightOrDark);
+                result.textContent = `The color is ${lightOrDark}`;
+                result.style.color = lightOrDark === "light" ? "black" : "white";
+            }
+
+            const colorPicker = document.getElementById("colorPicker");
+            const colorBox = document.getElementById("colorBox");
+            const result = document.getElementById("result");
+
+            colorPicker.addEventListener("change", function () {
+                updateColorDisplay();
+            });
+
+            // Chama a função na inicialização para garantir que a cor padrão seja verificada
+            updateColorDisplay();
+        </script>
+    </body>
+</html>
